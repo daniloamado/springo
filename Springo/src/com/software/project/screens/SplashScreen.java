@@ -13,25 +13,24 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.software.project.SoftwareProject2Game;
+import com.software.project.SpringoGame;
 import com.software.project.tweenacessors.SpriteTween;
-import com.sun.xml.internal.ws.util.CompletedFuture;
 
 public class SplashScreen implements Screen{
 
 	Texture splashTexture;
 	Sprite splashSprite;
 	SpriteBatch batch;
-	SoftwareProject2Game game;
+	SpringoGame game;
 	TweenManager manager;
 	
-	public SplashScreen(SoftwareProject2Game game) {
+	public SplashScreen(SpringoGame game) {
 		this.game = game;
 	}
 	
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClearColor(0, 0, 0.2f, 0.5f);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		manager.update(delta);
 		batch.begin();
@@ -70,7 +69,6 @@ public class SplashScreen implements Screen{
 	}
 
 	private void tweenCompleted() {
-		Gdx.app.log(SoftwareProject2Game.LOG, "Tween Complete");
 		game.setScreen(new MainMenu(game));
 	}	
 	

@@ -18,13 +18,7 @@
 		<link>
 			<name>assets</name>
 			<type>2</type>
-			<location>/Users/daniloamado/Downloads/Springo-android/assets</location>
+			<locationURI>PARENT-1-PROJECT_LOC/Springo-android/assets</locationURI>
 		</link>
 	</linkedResources>
-	<variableList>
-		<variable>
-			<name>copy_PARENT</name>
-			<value>$%7BPARENT-3-PROJECT_LOC%7D/Downloads</value>
-		</variable>
-	</variableList>
 </projectDescription>

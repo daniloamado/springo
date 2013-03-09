@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
-import com.software.project.SoftwareProject2Game;
+import com.software.project.SpringoGame;
 import com.software.project.utils.Assets;
 import com.software.project.utils.OverlapTester;
 import com.software.project.utils.Settings;
@@ -24,8 +24,9 @@ public class GameScreen implements Screen {
 	static final int GAME_PAUSED = 2;
 	static final int GAME_LEVEL_END = 3;
 	static final int GAME_OVER = 4;
+	static final int GAME_COMPLETED = 5;
 	
-	SoftwareProject2Game game;
+	SpringoGame game;
 	World world;
 	WorldRenderer renderer;
 	SpriteBatch batcher;
@@ -38,7 +39,7 @@ public class GameScreen implements Screen {
 	int lastScore;
 	String levelString;
 	
-	public GameScreen(SoftwareProject2Game game) {
+	public GameScreen(SpringoGame game) {
 		this.game = game;
 		world = new World(game);
 		
@@ -50,7 +51,7 @@ public class GameScreen implements Screen {
 		
 		
 		pauseBounds = new Rectangle(140, 200, 30, 64);
-		resumeBounds = new Rectangle(-120, 60, 140, 60);
+		resumeBounds = new Rectangle(-120, 60, 300, 60);
 		quitBounds = new Rectangle(-60, 0, 140, 60);
 		lastScore = 0;
 		
@@ -88,6 +89,9 @@ public class GameScreen implements Screen {
 		case GAME_LEVEL_END:
 			presentLevelEnd();
 			break;
+		case GAME_COMPLETED:
+			presentGameCompleted();
+			break;			
 		case GAME_OVER:
 			presentGameOver();
 			break;
@@ -116,9 +120,18 @@ public class GameScreen implements Screen {
 		Assets.font.draw(batcher, topText, - 140,  80);
 		Assets.font.draw(batcher, bottomText, -140 , 40);
 	}
+	
+	private void presentGameCompleted () {
+//		String topText = "congratulations ...";
+//		String bottomText = "loading next level!";
+//		Assets.font.draw(batcher, topText, - 140,  80);
+//		Assets.font.draw(batcher, bottomText, -140 , 40);
+		
+		game.setScreen(new AboutScreen(game));
+	}
 
 	private void presentGameOver () {
-		batcher.draw(Assets.gameOver, 160 - 160 / 2, 240 - 96 / 2, 160, 96);
+		batcher.draw(Assets.gameOver, -80, 0, 160, 96);
 		float scoreWidth = Assets.font.getBounds(levelString).width;
 		Assets.font.draw(batcher, levelString, 160 - scoreWidth / 2, 480 - 20);
 	}
@@ -165,6 +178,9 @@ public class GameScreen implements Screen {
 		case GAME_LEVEL_END:
 			updateLevelEnd();
 			break;
+		case GAME_COMPLETED:
+			updateGameCompleted();
+			break;
 		case GAME_OVER:
 			updateGameOver();
 			break;
@@ -208,6 +224,9 @@ public class GameScreen implements Screen {
 		if (world.state == World.WORLD_STATE_NEXT_LEVEL) {
 			state = GAME_LEVEL_END;
 		}
+		if (world.state == World.WORLD_STATE_GAME_COMPLETED) {
+			state = GAME_COMPLETED;
+		}
 		if (world.state == World.WORLD_STATE_GAME_OVER) {
 			state = GAME_OVER;
 			if (lastScore >= Settings.highscores[4])
@@ -246,7 +265,12 @@ public class GameScreen implements Screen {
 			state = GAME_READY;
 		}
 	}
-
+	
+	private void updateGameCompleted () {
+		game.level = 1;
+		state = GAME_READY;
+	}
+	
 	private void updateGameOver () {
 		if (Gdx.input.justTouched()) {
 			game.setScreen(new MainMenu(game));

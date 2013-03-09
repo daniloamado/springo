@@ -1,0 +1,40 @@
+
+test.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+input/test02 (non POT)
+  rotate: false
+  xy: 1, 199
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+input/test01
+  rotate: false
+  xy: 303, 243
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+input/test03 (multi shapes)
+  rotate: false
+  xy: 561, 243
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+input/button_normal
+  rotate: false
+  xy: 303, 1
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+input/buttons_pressed
+  rotate: false
+  xy: 545, 1
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1

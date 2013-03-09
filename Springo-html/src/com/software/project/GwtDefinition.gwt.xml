@@ -3,7 +3,7 @@
 <module>
 	<inherits name='com.badlogic.gdx.backends.gdx_backends_gwt' />
 	<inherits name='aurelienribon.tweenengine' />
-	<inherits name='SoftwareProject2Game' />
+	<inherits name='SpringoGame' />
 	<entry-point class='com.software.project.client.GwtLauncher' />
-	<set-configuration-property name="gdx.assetpath" value="../TestSoftwareProject2-android/assets" />
+	<set-configuration-property name="gdx.assetpath" value="../Springo-android/assets" />
 </module>

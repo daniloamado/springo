@@ -1,3 +1,15 @@
-d:
+d:war/
 d:data
-i:data/angrybirds.jpg
+i:data/about.png
+i:data/background.png
+t:data/font.fnt
+i:data/font.png
+i:data/IcedPlatform.png
+i:data/items.png
+i:data/movPlatform.png
+i:data/platform.png
+i:data/portal.png
+i:data/splash.png
+i:data/springo.png
+b:data/test.atlas
+i:data/test.png

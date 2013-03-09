@@ -8,14 +8,14 @@ public class Springo extends MoveableEntity{
 	public static final int SPRINGO_STATE_JUMP = 0;
 	public static final int SPRINGO_STATE_FALL = 1;
 	public static final int SPRINGO_STATE_HIT = 2;
-	public static final float SPRINGO_JUMP_VELOCITY = 11 /2;
-	public static final float SPRINGO_MOVE_VELOCITY = 20 /2;
+	public static final float SPRINGO_JUMP_VELOCITY = 250;
+	public static final float SPRINGO_MOVE_VELOCITY = 400;
 	
 	public int state;
 	float stateTime;
 	
-	public Springo(Vector2 position, float width, float height, float rotation, float SPEED) {
-		super(SPEED, rotation, width, height, position);
+	public Springo(Vector2 position) {
+		super(5f, 0, 46, 60, position);
 		state = SPRINGO_STATE_FALL;
 		stateTime = 0;
 	}
@@ -25,8 +25,8 @@ public class Springo extends MoveableEntity{
 		
 		velocity.add(World.gravity.x * deltaTime, World.gravity.y * deltaTime);
 		position.add(velocity.x * deltaTime, velocity.y * deltaTime);
-		bounds.x = position.x - bounds.width / 2;
-		bounds.y = position.y - bounds.height / 2;
+		bounds.x = position.x - bounds.width / 4;
+		bounds.y = position.y - bounds.height / 6;
 
 		if (velocity.y > 0 && state != SPRINGO_STATE_HIT) {
 			if (state != SPRINGO_STATE_JUMP) {
@@ -47,8 +47,6 @@ public class Springo extends MoveableEntity{
 
 		stateTime += deltaTime;
 		
-		
-		//position.add(velocity.tmp().mul(Gdx.graphics.getDeltaTime() * SPEED));
 	}
 
 	public void hitPlatform () {

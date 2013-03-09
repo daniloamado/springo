@@ -6,8 +6,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.software.project.model.IcyPlatform;
+import com.software.project.model.LongPlatform;
 import com.software.project.model.MovingPlatform;
 import com.software.project.model.Platform;
 import com.software.project.model.Portal;
@@ -21,17 +22,21 @@ public class WorldRenderer {
 	List<Platform> platforms;
 	Portal portal;
 	MovingPlatform movingPlatform;
+	LongPlatform longPlatform;
 	OrthographicCamera cam;
 	Texture springoTexture;
 	Texture platformTexture;
+	Texture longPlatformTexture;
+	Texture icyPlatformTexture;
 	Texture portalTexture;
 	Texture movingPlatformTexture;
 	Texture backgroundTexture;
+	Texture icyBackgroundTexture;
 	float width, height;
 	
 	public WorldRenderer(SpriteBatch batch, World world) {
-		width = Gdx.graphics.getWidth() / 30;
-		height = Gdx.graphics.getHeight() / 30;
+		width = Gdx.graphics.getWidth();
+		height = Gdx.graphics.getHeight();
 		this.world = world;
 		
 		cam = new OrthographicCamera();
@@ -42,19 +47,13 @@ public class WorldRenderer {
 		batch.setProjectionMatrix(cam.combined);
 		
 		springoTexture = new Texture("data/springo.png");
-		springoTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		
 		platformTexture = new Texture("data/platform.png");
-		platformTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		
+		longPlatformTexture = new Texture("data/longPlatform.png");
+		icyPlatformTexture = new Texture("data/icyPlatform.png");
 		portalTexture = new Texture("data/portal.png");
-		portalTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		
 		movingPlatformTexture = new Texture("data/movPlatform.png");
-		movingPlatformTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		
 		backgroundTexture = new Texture("data/background.png");
-		backgroundTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		icyBackgroundTexture = new Texture("data/icyBackground.png");
 	}
 	
 	public void render() {
@@ -69,13 +68,25 @@ public class WorldRenderer {
 		springo = world.getSpringo();
 		platforms = world.getPlatforms();
 		portal = world.getPortal();
+		longPlatform = world.getLongPlatform();
 		movingPlatform = world.getMovingPlatform();
 		batch.begin();
-		batch.draw(backgroundTexture, 0, 0, 0, 0, 20, 13, 1, 1, 0, 0, 0, 3, 3, false, false);
-		//batch.draw(movingPlatformTexture, movingPlatform.getPosition().x, movingPlatform.getPosition().y, 0, 0, movingPlatform.getWidth(), movingPlatform.getHeight(), scaleX, scaleY, 0, 0, 0, movingPlatformTexture.getWidth(), movingPlatformTexture.getHeight(), false, false);
+		
+		if (!platforms.isEmpty() && platforms.get(0) instanceof IcyPlatform) {
+			batch.draw(icyBackgroundTexture, 0, 0, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 1, 1, 0, 0, 0, icyBackgroundTexture.getWidth(), icyBackgroundTexture.getHeight(), false, false);			
+		} else {
+			batch.draw(backgroundTexture, 0, 0, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 1, 1, 0, 0, 0, backgroundTexture.getWidth(), backgroundTexture.getHeight(), false, false);			
+		}
+		
 		batch.draw(portalTexture, portal.getPosition().x, portal.getPosition().y, 0, 0, portal.getWidth(), portal.getHeight(), scaleX, scaleY, 0, 0, 0, portalTexture.getWidth(), portalTexture.getHeight(), false, false);
 		for (Platform p : platforms) {
-			batch.draw(platformTexture, p.getPosition().x, p.getPosition().y, 0, 0, p.getWidth() + 0.5f, p.getHeight() + 0.4f, scaleX, scaleY, 0, 0, 0, platformTexture.getWidth(), platformTexture.getHeight(), false, false);	
+			if (p instanceof LongPlatform) {
+				batch.draw(longPlatformTexture, p.getPosition().x, p.getPosition().y, 0, 0, p.getWidth() + 0.5f, p.getHeight() + 0.4f, scaleX, scaleY, 0, 0, 0, longPlatformTexture.getWidth(), longPlatformTexture.getHeight(), false, false);					
+			} else if (p instanceof IcyPlatform) {
+				batch.draw(icyPlatformTexture, p.getPosition().x, p.getPosition().y, 0, 0, p.getWidth() + 0.5f, p.getHeight() + 0.4f, scaleX, scaleY, 0, 0, 0, icyPlatformTexture.getWidth(), icyPlatformTexture.getHeight(), false, false);
+			} else {
+				batch.draw(platformTexture, p.getPosition().x, p.getPosition().y, 0, 0, p.getWidth() + 0.5f, p.getHeight() + 0.4f, scaleX, scaleY, 0, 0, 0, platformTexture.getWidth(), platformTexture.getHeight(), false, false);	
+			}
 		}
 		batch.draw(springoTexture, springo.getPosition().x, springo.getPosition().y, 0, 0, springo.getWidth(), springo.getHeight(), scaleX, scaleY, springo.getRotation(), 0, 0, springoTexture.getWidth(), springoTexture.getHeight(), false, false);
 		batch.end();
@@ -85,6 +96,8 @@ public class WorldRenderer {
 		batch.dispose();
 		springoTexture.dispose();
 		platformTexture.dispose();
+		longPlatformTexture.dispose();
+		icyPlatformTexture.dispose();
 		portalTexture.dispose();
 		movingPlatformTexture.dispose();
 	}

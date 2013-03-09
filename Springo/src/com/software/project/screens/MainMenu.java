@@ -11,32 +11,38 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
-import com.software.project.SoftwareProject2Game;
+import com.software.project.SpringoGame;
 
 public class MainMenu implements Screen{
 	
-	SoftwareProject2Game game;
+	private static final int BTN_WIDTH = 220;
+	private static final int BTN_HEIGHT = 60;	
+	
+	SpringoGame game;
 	Stage stage;
 	BitmapFont white;
 	BitmapFont black;
 	TextureAtlas atlas;
 	Skin skin;
 	SpriteBatch batch;
-	TextButton button;
+	TextButton btnPlay;
+	TextButton btnSettings;
+	TextButton btnScoreboard;
+	TextButton btnAbout;
 	Label label;
 	
-	public MainMenu(SoftwareProject2Game game) {
+	public MainMenu(SpringoGame game) {
 		this.game = game;
 	}
 
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor( 0, 0, 0, 1);
+		Gdx.gl.glClearColor( 0, 0, 0.2f, 0.5f);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
 		stage.act(delta);
@@ -61,38 +67,96 @@ public class MainMenu implements Screen{
 		style.down = skin.getDrawable("input/buttons_pressed");
 		style.font = white;
 		
-		button = new TextButton("Play", style);
-		button.setWidth(200);
-		button.setHeight(80);
-		button.setX(Gdx.graphics.getWidth() / 2 - button.getWidth() / 2);
-		button.setY(Gdx.graphics.getHeight() / 2 - button.getHeight() / 2);
+		btnPlay = new TextButton("Play", style);
+		btnPlay.setWidth(BTN_WIDTH);
+		btnPlay.setHeight(BTN_HEIGHT);
+		btnPlay.setX(Gdx.graphics.getWidth() / 2 - btnPlay.getWidth() / 2);
+		btnPlay.setY(Gdx.graphics.getHeight() / 1.35f - btnPlay.getHeight() / 2);
 		
-		button.addListener(new InputListener() {
+		btnPlay.addListener(new InputListener() {
 			@Override
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) {
-				
-				System.out.println("touch up");
+				game.setScreen(new GameScreen(game));
+			}
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y,
+					int pointer, int button) {
+				return true;
+			}
+		});
+		
+		btnScoreboard = new TextButton("Scoreboard", style);
+		btnScoreboard.setWidth(BTN_WIDTH);
+		btnScoreboard.setHeight(BTN_HEIGHT);
+		btnScoreboard.setX(Gdx.graphics.getWidth() / 2 - btnScoreboard.getWidth() / 2);
+		btnScoreboard.setY(Gdx.graphics.getHeight() / 1.9f - btnScoreboard.getHeight() / 2);
+		
+		btnScoreboard.addListener(new InputListener(){
+			@Override
+			public void touchUp(InputEvent event, float x, float y,
+					int pointer, int button) {
 				game.setScreen(new GameScreen(game));
 				
 			}
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y,
 					int pointer, int button) {
+				return true;
+			}	
+		});
+		
+		btnSettings = new TextButton("Settings", style);
+		btnSettings.setWidth(BTN_WIDTH);
+		btnSettings.setHeight(BTN_HEIGHT);
+		btnSettings.setX(Gdx.graphics.getWidth() / 2 - btnSettings.getWidth() / 2);
+		btnSettings.setY(Gdx.graphics.getHeight() / 3.2f - btnSettings.getHeight() / 2);
+		
+		btnSettings.addListener(new InputListener(){
+			@Override
+			public void touchUp(InputEvent event, float x, float y,
+					int pointer, int button) {
+				game.setScreen(new GameScreen(game));
 				
-				System.out.println("touch down");
+			}
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y,
+					int pointer, int button) {
 				return true;
 			}
 		});
 		
-		LabelStyle ls = new LabelStyle(white, Color.YELLOW);
-		label = new Label("Springo", ls);
+		btnAbout = new TextButton("About", style);
+		btnAbout.setWidth(BTN_WIDTH);
+		btnAbout.setHeight(BTN_HEIGHT);
+		btnAbout.setX(Gdx.graphics.getWidth() / 2 - btnSettings.getWidth() / 2);
+		btnAbout.setY(Gdx.graphics.getHeight() / 10 - btnSettings.getHeight() / 2);
+		
+		btnAbout.addListener(new InputListener(){
+			@Override
+			public void touchUp(InputEvent event, float x, float y,
+					int pointer, int button) {
+				game.setScreen(new AboutScreen(game));
+				
+			}
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y,
+					int pointer, int button) {
+				return true;
+			}
+		});
+		
+		LabelStyle ls = new LabelStyle(white, Color.BLUE);
+		label = new Label("Springo - Main Menu", ls);
 		label.setX(0);
-		label.setY(Gdx.graphics.getHeight() / 2 + 100);
+		label.setY(Gdx.graphics.getHeight() / 2 + 250);
 		label.setWidth(width);
 		label.setAlignment(Align.center);
 		
-		stage.addActor(button);
+		stage.addActor(btnPlay);
+		stage.addActor(btnScoreboard);
+		stage.addActor(btnSettings);
+		stage.addActor(btnAbout);
 		stage.addActor(label);
 	}
 
@@ -103,11 +167,12 @@ public class MainMenu implements Screen{
 		atlas = new TextureAtlas("data/test.atlas");
 		skin.addRegions(atlas);
 		white = new BitmapFont(Gdx.files.internal("data/font.fnt"), false);
+		
 	}
 
 	@Override
 	public void hide() {
-		dispose();
+		//dispose();
 	}
 
 	@Override

@@ -5,7 +5,9 @@ import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
-import com.software.project.SoftwareProject2Game;
+import com.software.project.SpringoGame;
+import com.software.project.model.IcyPlatform;
+import com.software.project.model.LongPlatform;
 import com.software.project.model.MovingPlatform;
 import com.software.project.model.Platform;
 import com.software.project.model.Portal;
@@ -14,32 +16,32 @@ import com.software.project.utils.OverlapTester;
 
 public class World {
 	
-	public static final Vector2 gravity = new Vector2(0, -12);
+	public static final Vector2 gravity = new Vector2(0, -400);
 	
-	public static final float WORLD_WIDTH = 18;
-	public static final float WORLD_HEIGHT = 20;
+	public static final float WORLD_WIDTH = Gdx.graphics.getWidth();
+	public static final float WORLD_HEIGHT = Gdx.graphics.getHeight();
 	public static final int WORLD_STATE_RUNNING = 0;
 	public static final int WORLD_STATE_NEXT_LEVEL = 1;
 	public static final int WORLD_STATE_GAME_OVER = 2;
-	public static final float SPRINGO_WIDTH = 0.7f;
-	public static final float SPRINGO_HEIGHT = 0.7f;
-	public static final float SPRINGO_ROTATION = 0;
+	public static final int WORLD_STATE_GAME_COMPLETED = 3;
 	
 	public float heightSoFar;
 	public int score;
 	public int state;
 	
-	SoftwareProject2Game game;
+	SpringoGame game;
 	Springo springo;
 	List<Platform> platforms;
 	MovingPlatform movingPlatform;
+	LongPlatform longPlatform;
+	IcyPlatform icyPlatform;
 	Portal portal;
+	boolean lastLevel;
 	
-	public World(SoftwareProject2Game game) {
+	public World(SpringoGame game) {
 		this.game = game;
-		springo = new Springo(new Vector2(0, 1), SPRINGO_WIDTH, SPRINGO_HEIGHT, SPRINGO_ROTATION, 5f);
+		springo = new Springo(new Vector2(0, 60));
 		platforms = new ArrayList<Platform>();
-		//movingPlatform = new MovingPlatform(new Vector2(2, 5), 2.5f, 0.5f, 0, 5f);
 		Gdx.input.setInputProcessor(new InputHandler(this));
 		generateLevel(game.level);
 	}
@@ -48,28 +50,47 @@ public class World {
 		
 		switch (level) {
 		case 1: 
-			portal = new Portal(new Vector2(13, 7), 0.9f, 1);
-			platforms.add(new Platform(new Vector2(9, 6), 5, 0.5f));
-			platforms.add(new Platform(new Vector2(1.5f, 5), 5, 0.5f));
-			platforms.add(new Platform(new Vector2(10, 4), 5, 0.5f));
-			platforms.add(new Platform(new Vector2(2, 3), 5, 0.5f));
-			platforms.add(new Platform(new Vector2(9, 2), 5, 0.5f));
-			platforms.add(new Platform(new Vector2(1.5f, 1), 5, 0.5f));	
+			portal = new Portal(new Vector2(1100, 570));
+			platforms.add(new Platform(new Vector2(750, 490)));
+			platforms.add(new Platform(new Vector2(100, 400)));
+			platforms.add(new Platform(new Vector2(200, 300)));
+			platforms.add(new Platform(new Vector2(730, 200)));
+			platforms.add(new Platform(new Vector2(100, 100)));
+			platforms.add(new LongPlatform(new Vector2(0, 0)));
 			break;
 		case 2:
-			portal = new Portal(new Vector2(13, 3), 0.9f, 1);
-			platforms.add(new Platform(new Vector2(9, 2), 5, 0.5f));
-			platforms.add(new Platform(new Vector2(1.5f, 1), 5, 0.5f));
+			portal = new Portal(new Vector2(1100, 500));
+			platforms.add(new Platform(new Vector2(700, 400)));
+			platforms.add(new Platform(new Vector2(100, 300)));
+			platforms.add(new Platform(new Vector2(700, 200)));
+			platforms.add(new Platform(new Vector2(100, 100)));
+			platforms.add(new LongPlatform(new Vector2(0, 0)));
 			break;
 		case 3:
-			portal = new Portal(new Vector2(13, 7), 0.9f, 1);
-			platforms.add(new Platform(new Vector2(9, 6), 5, 0.5f));
-			platforms.add(new Platform(new Vector2(1.5f, 5), 5, 0.5f));
-			platforms.add(new Platform(new Vector2(10, 4), 5, 0.5f));
-			platforms.add(new Platform(new Vector2(2, 3), 5, 0.5f));
-			platforms.add(new Platform(new Vector2(9, 2), 5, 0.5f));
-			platforms.add(new Platform(new Vector2(1.5f, 1), 5, 0.5f));	
+			portal = new Portal(new Vector2(10, 560));
+			platforms.add(new Platform(new Vector2(100, 470)));
+			platforms.add(new Platform(new Vector2(750, 400)));
+			platforms.add(new Platform(new Vector2(730, 300)));
+			platforms.add(new Platform(new Vector2(200, 200)));
+			platforms.add(new Platform(new Vector2(100, 100)));
+			platforms.add(new LongPlatform(new Vector2(0, 0)));
 			break;
+		case 4:
+			portal = new Portal(new Vector2(1100, 570));
+			platforms.add(new IcyPlatform(new Vector2(750, 490)));
+			platforms.add(new IcyPlatform(new Vector2(100, 400)));
+			platforms.add(new IcyPlatform(new Vector2(200, 300)));
+			platforms.add(new IcyPlatform(new Vector2(730, 200)));
+			platforms.add(new IcyPlatform(new Vector2(100, 100)));
+			platforms.add(new IcyPlatform(new Vector2(0, 0)));
+			break;
+		case 5:
+			portal = new Portal(new Vector2(1100, 300));
+			platforms.add(new IcyPlatform(new Vector2(800, 200)));
+			platforms.add(new IcyPlatform(new Vector2(200, 100)));
+			platforms.add(new IcyPlatform(new Vector2(0, 0)));
+			lastLevel = true;
+			break;		
 		}
 		
 	}
@@ -90,15 +111,16 @@ public class World {
 		return movingPlatform;
 	}
 	
+	public LongPlatform getLongPlatform() {
+		return longPlatform;
+	}
+	
 	public void update(float deltaTime, float accelX) {
 		updateSpringo(deltaTime, accelX);
 		
 		if (springo.state != Springo.SPRINGO_STATE_HIT) checkCollisions();
 		checkGameOver();
-		
-		//springo.update(deltaTime);
-		//movingPlatform.update(deltaTime);
-		
+
 	}
 	
 	private void updateSpringo (float deltaTime, float accelX) {
@@ -123,7 +145,7 @@ public class World {
 		int len = platforms.size();
 		for (int i = 0; i < len; i++) {
 			Platform platform = platforms.get(i);
-			if (springo.position.y > platform.position.y) {
+			if (springo.position.y > platform.position.y + 30) {
 				if (OverlapTester.overlapRectangles(springo.bounds, platform.bounds)) {
 					springo.hitPlatform();
 					break;
@@ -134,12 +156,16 @@ public class World {
 
 	private void checkPortalCollisions() {
 		if (OverlapTester.overlapRectangles(portal.bounds, springo.bounds)) {
-			state = WORLD_STATE_NEXT_LEVEL;
+			if (lastLevel) {
+				state = WORLD_STATE_GAME_COMPLETED;
+			} else {
+				state = WORLD_STATE_NEXT_LEVEL;
+			}
 		}
 	}
 	
 	private void checkGameOver() {
-		if (heightSoFar - 7.5f > springo.position.y) {
+		if (heightSoFar - 300 > springo.position.y) {
 			state = WORLD_STATE_GAME_OVER;
 		}
 	}

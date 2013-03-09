@@ -4,8 +4,8 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Portal extends Entity{
 
-	public Portal(Vector2 position, float width, float height) {
-		super(position, width, height);
+	public Portal(Vector2 position) {
+		super(position, 70, 99);
 	}
 
 }
