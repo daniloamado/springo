@@ -1,5 +1,7 @@
 package com.software.project.screens;
 
+import java.text.DecimalFormat;
+
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -10,6 +12,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.NumberUtils;
+import com.badlogic.gdx.utils.Timer;
 import com.software.project.SpringoGame;
 import com.software.project.utils.Assets;
 import com.software.project.utils.OverlapTester;
@@ -26,6 +30,7 @@ public class GameScreen implements Screen {
 	static final int GAME_OVER = 4;
 	static final int GAME_COMPLETED = 5;
 	
+	float counter = 0;
 	SpringoGame game;
 	World world;
 	WorldRenderer renderer;
@@ -81,7 +86,7 @@ public class GameScreen implements Screen {
 			presentReady();
 			break;
 		case GAME_RUNNING:
-			presentRunning();
+			presentRunning(deltaTime);
 			break;
 		case GAME_PAUSED:
 			presentPaused();
@@ -104,21 +109,28 @@ public class GameScreen implements Screen {
 		levelString = "Level: " + game.level;
 	}
 
-	private void presentRunning () {
+	private void presentRunning (float delta) {
 		batcher.draw(Assets.pause, 140, 200, 30, 64);
-		Assets.font.draw(batcher, levelString, - 140, 235);
+		Assets.font.draw(batcher, levelString, - 145, 240);
+		
+		counter = counter + delta;
+		String counterOut = String.valueOf(counter);
+		
+		Assets.font.draw(batcher, "Time: " + counterOut.substring(0, counterOut.indexOf('.') + 2), 0, 240);
+		
 	}
 
 	private void presentPaused () {
 		batcher.draw(Assets.pauseMenu, -60, 0, 140, 120);
-		Assets.font.draw(batcher, levelString, -140, 235);
+		Assets.font.draw(batcher, levelString, -145, 240);
 	}
 
 	private void presentLevelEnd () {
-		String topText = "congratulations ...";
+		String topText = "congratulations...";
 		String bottomText = "loading next level!";
-		Assets.font.draw(batcher, topText, - 140,  80);
-		Assets.font.draw(batcher, bottomText, -140 , 40);
+		Assets.font.draw(batcher, topText, - 95,  60);
+		Assets.font.draw(batcher, bottomText, -95 , 20);
+		counter = 0;
 	}
 	
 	private void presentGameCompleted () {
@@ -127,7 +139,10 @@ public class GameScreen implements Screen {
 //		Assets.font.draw(batcher, topText, - 140,  80);
 //		Assets.font.draw(batcher, bottomText, -140 , 40);
 		
-		game.setScreen(new AboutScreen(game));
+		game.level = 1;
+		state = GAME_READY;
+		
+		game.setScreen(new CongratulationsScreen(game));
 	}
 
 	private void presentGameOver () {

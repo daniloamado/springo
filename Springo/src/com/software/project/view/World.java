@@ -83,12 +83,16 @@ public class World {
 			platforms.add(new IcyPlatform(new Vector2(730, 200)));
 			platforms.add(new IcyPlatform(new Vector2(100, 100)));
 			platforms.add(new IcyPlatform(new Vector2(0, 0)));
+			platforms.add(new IcyPlatform(new Vector2(485, 0)));
+			platforms.add(new IcyPlatform(new Vector2(900, 0)));
 			break;
 		case 5:
 			portal = new Portal(new Vector2(1100, 300));
 			platforms.add(new IcyPlatform(new Vector2(800, 200)));
 			platforms.add(new IcyPlatform(new Vector2(200, 100)));
 			platforms.add(new IcyPlatform(new Vector2(0, 0)));
+			platforms.add(new IcyPlatform(new Vector2(485, 0)));
+			platforms.add(new IcyPlatform(new Vector2(900, 0)));
 			lastLevel = true;
 			break;		
 		}

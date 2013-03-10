@@ -2,10 +2,14 @@ d:war/
 d:data
 i:data/about.png
 i:data/background.png
+i:data/congratulations.png
 t:data/font.fnt
-i:data/font.png
-i:data/IcedPlatform.png
+i:data/font_0.png
+b:data/font_0.tga
+i:data/icyBackground.png
+i:data/icyPlatform.png
 i:data/items.png
+i:data/longPlatform.png
 i:data/movPlatform.png
 i:data/platform.png
 i:data/portal.png
@@ -13,3 +17,4 @@ i:data/splash.png
 i:data/springo.png
 b:data/test.atlas
 i:data/test.png
+b:data/Thumbs.db
