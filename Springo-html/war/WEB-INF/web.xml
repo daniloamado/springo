@@ -15,5 +15,15 @@
     <servlet-name>SystemServiceServlet</servlet-name>
     <url-pattern>/_ah/spi/*</url-pattern>
   </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>ScoreServlet</servlet-name>
+    <servlet-class>com.software.project.servlet.ScoreServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>ScoreServlet</servlet-name>
+    <url-pattern>/score</url-pattern>
+  </servlet-mapping>
 
 </web-app>

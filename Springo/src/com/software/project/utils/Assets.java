@@ -23,12 +23,10 @@ public class Assets {
 	public static TextureRegion arrow;
 	public static TextureRegion pause;
 	public static TextureRegion spring;
-	public static TextureRegion castle;
 	public static Animation coinAnim;
-	public static Animation bobJump;
-	public static Animation bobFall;
-	public static TextureRegion bobHit;
-	public static Animation squirrelFly;
+	public static Animation springoJump;
+	public static Animation springoFall;
+	public static TextureRegion springoHit;
 	public static TextureRegion platform;
 	public static Animation brakingPlatform;
 	public static BitmapFont font;
@@ -61,13 +59,11 @@ public class Assets {
 		pause = new TextureRegion(items, 64, 64, 64, 64);
 
 		spring = new TextureRegion(items, 128, 0, 32, 32);
-		castle = new TextureRegion(items, 128, 64, 64, 64);
 		coinAnim = new Animation(0.2f, new TextureRegion(items, 128, 32, 32, 32), new TextureRegion(items, 160, 32, 32, 32),
 			new TextureRegion(items, 192, 32, 32, 32), new TextureRegion(items, 160, 32, 32, 32));
-		bobJump = new Animation(0.2f, new TextureRegion(items, 0, 128, 32, 32), new TextureRegion(items, 32, 128, 32, 32));
-		bobFall = new Animation(0.2f, new TextureRegion(items, 64, 128, 32, 32), new TextureRegion(items, 96, 128, 32, 32));
-		bobHit = new TextureRegion(items, 128, 128, 32, 32);
-		squirrelFly = new Animation(0.2f, new TextureRegion(items, 0, 160, 32, 32), new TextureRegion(items, 32, 160, 32, 32));
+		springoJump = new Animation(0.2f, new TextureRegion(items, 0, 128, 32, 32), new TextureRegion(items, 32, 128, 32, 32));
+		springoFall = new Animation(0.2f, new TextureRegion(items, 64, 128, 32, 32), new TextureRegion(items, 96, 128, 32, 32));
+		springoHit = new TextureRegion(items, 128, 128, 32, 32);
 		platform = new TextureRegion(items, 64, 160, 64, 16);
 		brakingPlatform = new Animation(0.2f, new TextureRegion(items, 64, 160, 64, 16), new TextureRegion(items, 64, 176, 64, 16),
 			new TextureRegion(items, 64, 192, 64, 16), new TextureRegion(items, 64, 208, 64, 16));

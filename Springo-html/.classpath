@@ -10,6 +10,6 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gdx-backend-gwt-sources.jar"/>
 	<classpathentry kind="lib" path="/Springo/libs/tween-engine-api.jar" sourcepath="/Springo/libs/tween-engine-api-sources.jar"/>
 	<classpathentry kind="lib" path="/Springo/libs/tween-engine-api-sources.jar"/>
-	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
+	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER/v2"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

@@ -7,27 +7,67 @@ import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Net.HttpMethods;
+import com.badlogic.gdx.Net.HttpRequest;
+import com.badlogic.gdx.Net.HttpResponse;
+import com.badlogic.gdx.Net.HttpResponseListener;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldListener;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.software.project.SpringoGame;
 import com.software.project.tweenacessors.SpriteTween;
+import com.software.project.utils.Assets;
 
-public class SplashScreen implements Screen{
+public class SplashScreen implements Screen {
 
 	Texture splashTexture;
 	Sprite splashSprite;
 	SpriteBatch batch;
 	SpringoGame game;
 	TweenManager manager;
-	
+
 	public SplashScreen(SpringoGame game) {
+		
+//		TextFieldStyle textStyle = new TextFieldStyle();
+//		textStyle.font = Assets.font;
+//		
+//		TextField textfield = new TextField("test", textStyle);
+//		textfield.setTextFieldListener(new TextFieldListener() {
+//			 @Override
+//			 public void keyTyped (TextField textField, char key) {
+//			         //if (key == '\n') textField.getOnscreenKeyboard().show(false);
+//			     }
+//			 });
+		
+		
+//		HttpRequest httpGet = new HttpRequest(HttpMethods.GET);
+//		httpGet.setUrl("http://127.0.0.1:8888/score?level=" + game.level + "&time=" + 10);
+//		
+//		Gdx.net.sendHttpRequest(httpGet, new HttpResponseListener() {
+//			public void handleHttpResponse(HttpResponse httpResponse) {
+//				String status = httpResponse.getResultAsString();
+//				System.out.println("status from request: " + status);
+//				
+//				Gdx.net.openURI("http://www.google.com");
+//				
+//			}
+//
+//			public void failed(Throwable t) {
+//				String status = "failed";
+//				System.out.println("failed from request: " + status);
+//			}
+//		});
+		
+		
 		this.game = game;
 	}
-	
+
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0.2f, 0.5f);
@@ -46,32 +86,37 @@ public class SplashScreen implements Screen{
 	public void show() {
 		splashTexture = new Texture("data/splash.png");
 		splashTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		
+
 		splashSprite = new Sprite(splashTexture);
 		splashSprite.setColor(1, 1, 1, 0);
-		splashSprite.setX(Gdx.graphics.getWidth() /2 - splashSprite.getWidth() /2);
-		splashSprite.setY(Gdx.graphics.getHeight() /2 - splashSprite.getHeight() /2);
-		
+		splashSprite.setX(Gdx.graphics.getWidth() / 2 - splashSprite.getWidth()
+				/ 2);
+		splashSprite.setY(Gdx.graphics.getHeight() / 2
+				- splashSprite.getHeight() / 2);
+
 		batch = new SpriteBatch();
-		
+
 		Tween.registerAccessor(Sprite.class, new SpriteTween());
-		
+
 		manager = new TweenManager();
-		
+
 		TweenCallback cb = new TweenCallback() {
 			@Override
 			public void onEvent(int type, BaseTween<?> source) {
 				tweenCompleted();
-			}			
+			}
 		};
-		
-		Tween.to(splashSprite, SpriteTween.ALPHA, 2.5f).target(1).ease(TweenEquations.easeInQuad).repeatYoyo(1, 2.5f).setCallback(cb).setCallbackTriggers(TweenCallback.COMPLETE).start(manager);
+
+		Tween.to(splashSprite, SpriteTween.ALPHA, 2.5f).target(1)
+				.ease(TweenEquations.easeInQuad).repeatYoyo(1, 2.5f)
+				.setCallback(cb).setCallbackTriggers(TweenCallback.COMPLETE)
+				.start(manager);
 	}
 
 	private void tweenCompleted() {
 		game.setScreen(new MainMenu(game));
-	}	
-	
+	}
+
 	@Override
 	public void hide() {
 	}

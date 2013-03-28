@@ -1,4 +1,4 @@
-d:war/
+d:
 d:data
 i:data/about.png
 i:data/background.png

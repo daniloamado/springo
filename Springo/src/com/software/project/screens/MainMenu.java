@@ -15,8 +15,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldFilter;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldListener;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.software.project.SpringoGame;
+import com.software.project.utils.Assets;
 
 public class MainMenu implements Screen{
 	
@@ -34,6 +39,7 @@ public class MainMenu implements Screen{
 	TextButton btnSettings;
 	TextButton btnScoreboard;
 	TextButton btnAbout;
+	
 	Label label;
 	
 	public MainMenu(SpringoGame game) {
@@ -146,6 +152,27 @@ public class MainMenu implements Screen{
 			}
 		});
 		
+//		
+//		TextFieldStyle textStyle = new TextFieldStyle();
+//		textStyle.font = Assets.font;
+//		textStyle.fontColor = Color.BLUE;
+//		
+//		
+//		TextField textfield = new TextField("", textStyle);
+//		textfield.setWidth(200);
+//		textfield.setHeight(40);
+//		textfield.setX(10);
+//		textfield.setY(10);
+		
+//		
+//		textfield.setTextFieldListener(new TextFieldListener() {
+//			 @Override
+//			 public void keyTyped (TextField textField, char key) {
+//				 if (key == '\n') textField.getOnscreenKeyboard().show(false);
+//			         
+//			     }
+//			 });
+		
 		LabelStyle ls = new LabelStyle(white, Color.BLUE);
 		label = new Label("Springo - Main Menu", ls);
 		label.setX(0);
@@ -158,6 +185,11 @@ public class MainMenu implements Screen{
 		stage.addActor(btnSettings);
 		stage.addActor(btnAbout);
 		stage.addActor(label);
+//		stage.addActor(textfield);
+//		
+//		stage.setKeyboardFocus(textfield);
+		
+		
 	}
 
 	@Override
