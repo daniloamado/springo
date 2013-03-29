@@ -1,4 +1,4 @@
-package com.software.project.servlet;
+package com.software.project.view;
 
 import java.io.IOException;
 
@@ -7,7 +7,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class ScoreServlet extends HttpServlet {
+import com.software.project.controller.CommandFactory;
+import com.software.project.controller.Controller;
+
+public class ScoreBoardServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -15,11 +18,9 @@ public class ScoreServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
-		int level = Integer.valueOf(request.getParameter("level"));
-		float time = Float.valueOf(request.getParameter("time"));
-		
-		
-		
+		Controller controller = new Controller(request, response); 
+		controller.setCommand(CommandFactory.getCommand(request.getParameter("cmd")));
+		controller.process();
 		
 	}
 

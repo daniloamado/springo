@@ -1,4 +1,11 @@
-<!-- Indices written at Sun, 24 Mar 2013 13:58:19 EDT -->
+<!-- Indices written at Fri, 29 Mar 2013 10:25:17 EDT -->
 
-<datastore-indexes/>
+<datastore-indexes>
 
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Score" ancestor="false" source="auto">
+        <property name="levelPlayed" direction="asc"/>
+        <property name="timeSpent" direction="asc"/>
+    </datastore-index>
+
+</datastore-indexes>

@@ -38,6 +38,8 @@ public class GameScreen implements Screen {
 	static final int GAME_LEVEL_END = 3;
 	static final int GAME_OVER = 4;
 	static final int GAME_COMPLETED = 5;
+	static final int GAME_USER_REQUESTED = 6;
+	static final String USER_REQUIRED = "USER_REQUIRED";
 	
 	float counter = 0;
 	SpringoGame game;
@@ -138,40 +140,31 @@ public class GameScreen implements Screen {
 
 	private void presentLevelEnd () {
 		
-		String counterOut = String.valueOf(counter);
-		counterOut = counterOut.substring(0, counterOut.indexOf('.') + 2);
+		final String counterOut = String.valueOf(counter).substring(0, String.valueOf(counter).indexOf('.') + 2);
 		
 		HttpRequest httpGet = new HttpRequest(HttpMethods.GET);
-		httpGet.setUrl("http://localhost:8888/score?level=" + game.level + "&time=" + counterOut);
+		httpGet.setUrl("http://daniloandradesp.appspot.com/scoreboard?cmd=LevelEnd&level=" + game.level + "&time=" + counterOut);
 		
 		Gdx.net.sendHttpRequest(httpGet, new HttpResponseListener() {
 			public void handleHttpResponse(HttpResponse httpResponse) {
-				String status = httpResponse.getResultAsString();
-				System.out.println("status from request: " + status);
+				String response = httpResponse.getResultAsString();
+				
+				if (response.equals(GAME_USER_REQUESTED)) { 
+					state = GAME_USER_REQUESTED;
+					Gdx.input.setInputProcessor(stage);
+					stage.draw();					
+				} else {
+					Assets.font.draw(batcher, "Congratulations!", -90,  100);
+					Assets.font.draw(batcher, "Your time was: " + counterOut, - 80,  40);
+					Assets.font.draw(batcher, "Level played: " + game.level, -80 , 0);
+					Assets.font.draw(batcher, "Click to continue!", -90 , -60);
+				}
+				
 			}
-
 			public void failed(Throwable t) {
-				String status = "failed";
-				System.out.println("failed from request: " + status);
+				
 			}
 		});
-		
-		String topText = "Congratulations!"; 
-		String middleText = "Your time was: " + counterOut;
-		String middleText2 = "Level played: " + game.level;
-		String bottomText = "Click to continue!";
-		
-		if (counter > 10) { 
-			
-			Gdx.input.setInputProcessor(stage);
-			stage.draw();
-			
-		} else {
-			Assets.font.draw(batcher, topText, -90,  100);
-			Assets.font.draw(batcher, middleText, - 80,  40);
-			Assets.font.draw(batcher, middleText2, -80 , 0);
-			Assets.font.draw(batcher, bottomText, -90 , -60);
-		}
 
 	}
 	
@@ -286,6 +279,9 @@ public class GameScreen implements Screen {
 		case GAME_OVER:
 			updateGameOver();
 			break;
+		case GAME_USER_REQUESTED:
+			updateUserRequested();
+			break;
 		}
 
 	}
@@ -357,17 +353,32 @@ public class GameScreen implements Screen {
 			}
 		}
 	}
+	
+	private void updateUserRequested() {
+		
+		if (Gdx.input.justTouched() && !txtUserName.getText().isEmpty()) {
+		
+			final String counterOut = String.valueOf(counter).substring(0, String.valueOf(counter).indexOf('.') + 2);
+			HttpRequest httpGet = new HttpRequest(HttpMethods.GET);
+			httpGet.setUrl("http://daniloandradesp.appspot.com/scoreboard?cmd=AddScore&level=" + game.level + "&time=" + counterOut + "&user=" + txtUserName.getText());
+			
+			Gdx.net.sendHttpRequest(httpGet, new HttpResponseListener() {
+				public void handleHttpResponse(HttpResponse httpResponse) {
+					
+				}
+				public void failed(Throwable t) {
+					
+				}
+			});
+			
+			state = GAME_LEVEL_END;
+			Gdx.input.setInputProcessor(null);
+		
+		}
+	}
 
 	private void updateLevelEnd () {
 		if (Gdx.input.justTouched()) {
-			
-			if (Gdx.input.getInputProcessor() instanceof Stage) {
-				if (txtUserName.getText().isEmpty()) {
-					return;
-				}
-			}
-				
-			Gdx.input.setInputProcessor(null);
 			game.level++;
 			world = new World(game);
 			if (world.getPlatforms().get(0) instanceof IcyPlatform) {

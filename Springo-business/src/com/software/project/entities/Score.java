@@ -6,11 +6,21 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+@NamedQuery(name="getAllScoresByLevel", query="SELECT s FROM Score s WHERE s.levelPlayed = :level ORDER BY s.timeSpent ASC FETCH FIRST 5 ROWS ONLY")
+
 @Entity
 public class Score {
+	
+	public Score(String userName, Integer levelPlayed, Float timeSpent) {
+		this.userName = userName;
+		this.levelPlayed = levelPlayed;
+		this.timeSpent = timeSpent;
+		this.datePlayed = new Date();
+	}
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -19,7 +29,7 @@ public class Score {
 	private Integer levelPlayed;
 	private Float timeSpent;
 	@Temporal(value=TemporalType.DATE)
-	private Date dataPlayed;
+	private Date datePlayed;
 	
 	public Long getId() {
 		return id;
@@ -45,11 +55,11 @@ public class Score {
 	public void setTimeSpent(Float timeSpent) {
 		this.timeSpent = timeSpent;
 	}
-	public Date getDataPlayed() {
-		return dataPlayed;
+	public Date getDatePlayed() {
+		return datePlayed;
 	}
-	public void setDataPlayed(Date dataPlayed) {
-		this.dataPlayed = dataPlayed;
+	public void setDatePlayed(Date datePlayed) {
+		this.datePlayed = datePlayed;
 	}
 	
 }

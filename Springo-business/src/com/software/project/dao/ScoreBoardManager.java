@@ -7,11 +7,11 @@ import com.software.project.exceptions.SpringoException;
 
 public interface ScoreBoardManager {
 	
-	public Score addScore(Score scoreboard) throws SpringoException;
+	public Score addScore(Score score);
 	
 	public Score deleteScore(Long id) throws SpringoException;
 	
-	public List<Score> getAllScoresByLevel(Integer level) throws SpringoException;
+	public List<Score> getAllScoresByLevel(Integer level);
 	
 
 }
