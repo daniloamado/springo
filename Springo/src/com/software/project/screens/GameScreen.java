@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldListener;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.software.project.SpringoGame;
 import com.software.project.model.IcyPlatform;
@@ -56,6 +57,9 @@ public class GameScreen implements Screen {
 	String levelString;
 	Stage stage;
 	TextField txtUserName;
+	String response;
+	boolean httpRequestProcessed = false;
+	boolean httpRequestSent = false;
 	
 	public GameScreen(SpringoGame game) {
 		this.game = game;
@@ -142,38 +146,44 @@ public class GameScreen implements Screen {
 		
 		final String counterOut = String.valueOf(counter).substring(0, String.valueOf(counter).indexOf('.') + 2);
 		
-		HttpRequest httpGet = new HttpRequest(HttpMethods.GET);
-		httpGet.setUrl("http://daniloandradesp.appspot.com/scoreboard?cmd=LevelEnd&level=" + game.level + "&time=" + counterOut);
+		if (!httpRequestProcessed && !httpRequestSent) {
 		
-		Gdx.net.sendHttpRequest(httpGet, new HttpResponseListener() {
-			public void handleHttpResponse(HttpResponse httpResponse) {
-				String response = httpResponse.getResultAsString();
-				
-				if (response.equals(GAME_USER_REQUESTED)) { 
-					state = GAME_USER_REQUESTED;
-					Gdx.input.setInputProcessor(stage);
-					stage.draw();					
-				} else {
-					Assets.font.draw(batcher, "Congratulations!", -90,  100);
-					Assets.font.draw(batcher, "Your time was: " + counterOut, - 80,  40);
-					Assets.font.draw(batcher, "Level played: " + game.level, -80 , 0);
-					Assets.font.draw(batcher, "Click to continue!", -90 , -60);
+			HttpRequest httpGet = new HttpRequest(HttpMethods.GET);
+			httpGet.setUrl(Settings.serverAddress + "cmd=LevelEnd&level=" + game.level + "&time=" + counterOut);
+			httpRequestSent = true;
+			
+			Gdx.net.sendHttpRequest(httpGet, new HttpResponseListener() {
+				public void handleHttpResponse(HttpResponse httpResponse) {
+					response = httpResponse.getResultAsString();
+					httpRequestProcessed = true;
+					httpRequestSent = false;
 				}
-				
+				public void failed(Throwable t) {
+					System.out.println("http failed");
+				}
+			});
+		}
+		
+		if (httpRequestProcessed){
+			
+			if (response != null && response.trim().equals(String.valueOf(GAME_USER_REQUESTED))) {
+				Gdx.input.setInputProcessor(stage);
+				stage.draw();					
+			} else if (response.equals("")){
+				Assets.font.draw(batcher, "Congratulations!", -90,  100);
+				Assets.font.draw(batcher, "Your time was: " + counterOut, - 80,  40);
+				Assets.font.draw(batcher, "Level played: " + game.level, -80 , 0);
+				Assets.font.draw(batcher, "Click to continue!", -90 , -60);
 			}
-			public void failed(Throwable t) {
-				
-			}
-		});
+			
+		} else {
+			Assets.font.draw(batcher, "Loading next level...", - 80,  40);
+		}
 
 	}
 	
 	private void presentGameCompleted () {
-//		String topText = "congratulations ...";
-//		String bottomText = "loading next level!";
-//		Assets.font.draw(batcher, topText, - 140,  80);
-//		Assets.font.draw(batcher, bottomText, -140 , 40);
-		
+
 		game.level = 1;
 		state = GAME_READY;
 		
@@ -222,7 +232,18 @@ public class GameScreen implements Screen {
 		txtUserName.setWidth(250);
 		txtUserName.setMaxLength(15);
 		
-		Label lblClickToContinue = new Label("After typing your name, click on the screen to continue", new LabelStyle(Assets.font, Color.WHITE));
+		txtUserName.setTextFieldListener(new TextFieldListener() {
+			@Override
+			public void keyTyped(TextField textField, char key) {
+				// \n works for desktop version
+				if (!textField.getText().isEmpty() && key == '\r') {
+					httpRequestProcessed = false;
+					performUpdateLevelEnd();
+				}
+			}
+		});
+		
+		Label lblClickToContinue = new Label("press enter or click on the screen to continue", new LabelStyle(Assets.font, Color.WHITE));
 		lblClickToContinue.setX(150);
 		lblClickToContinue.setY(200);
 		
@@ -273,14 +294,8 @@ public class GameScreen implements Screen {
 		case GAME_LEVEL_END:
 			updateLevelEnd();
 			break;
-		case GAME_COMPLETED:
-			updateGameCompleted();
-			break;
 		case GAME_OVER:
 			updateGameOver();
-			break;
-		case GAME_USER_REQUESTED:
-			updateUserRequested();
 			break;
 		}
 
@@ -356,29 +371,45 @@ public class GameScreen implements Screen {
 	
 	private void updateUserRequested() {
 		
-		if (Gdx.input.justTouched() && !txtUserName.getText().isEmpty()) {
+		state = GAME_LEVEL_END;
+		response = null;
+		Gdx.input.setInputProcessor(null);
+	
+		final String counterOut = String.valueOf(counter).substring(0, String.valueOf(counter).indexOf('.') + 2);
+		HttpRequest httpGet = new HttpRequest(HttpMethods.GET);
+		httpGet.setUrl(Settings.serverAddress + "cmd=AddScore&level=" + game.level + "&time=" + counterOut + "&user=" + txtUserName.getText());
 		
-			final String counterOut = String.valueOf(counter).substring(0, String.valueOf(counter).indexOf('.') + 2);
-			HttpRequest httpGet = new HttpRequest(HttpMethods.GET);
-			httpGet.setUrl("http://daniloandradesp.appspot.com/scoreboard?cmd=AddScore&level=" + game.level + "&time=" + counterOut + "&user=" + txtUserName.getText());
+		Gdx.net.sendHttpRequest(httpGet, new HttpResponseListener() {
+			public void handleHttpResponse(HttpResponse httpResponse) {
+				
+			}
+			public void failed(Throwable t) {
+				
+			}
+		});
 			
-			Gdx.net.sendHttpRequest(httpGet, new HttpResponseListener() {
-				public void handleHttpResponse(HttpResponse httpResponse) {
-					
-				}
-				public void failed(Throwable t) {
-					
-				}
-			});
-			
-			state = GAME_LEVEL_END;
-			Gdx.input.setInputProcessor(null);
-		
-		}
 	}
-
+	
 	private void updateLevelEnd () {
 		if (Gdx.input.justTouched()) {
+			httpRequestProcessed = false;
+			performUpdateLevelEnd();
+		}
+	}
+	
+	private void performUpdateLevelEnd() {
+		if (Gdx.input.getInputProcessor() instanceof Stage) {
+			if (!txtUserName.getText().isEmpty()) {
+				updateUserRequested();
+			} else {
+				return;
+			}
+		}
+		
+		if (world.lastLevel) {
+			state = GAME_COMPLETED;
+		} else {
+		
 			game.level++;
 			world = new World(game);
 			if (world.getPlatforms().get(0) instanceof IcyPlatform) {
@@ -390,11 +421,6 @@ public class GameScreen implements Screen {
 			state = GAME_READY;
 			counter = 0;
 		}
-	}
-	
-	private void updateGameCompleted () {
-		game.level = 1;
-		state = GAME_READY;
 	}
 	
 	private void updateGameOver () {

@@ -1,5 +1,6 @@
-d:
+d:war/
 d:data
+b:data/.gitignore
 i:data/about.png
 i:data/background.png
 i:data/congratulations.png

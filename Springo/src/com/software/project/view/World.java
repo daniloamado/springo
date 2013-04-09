@@ -36,11 +36,12 @@ public class World {
 	LongPlatform longPlatform;
 	IcyPlatform icyPlatform;
 	Portal portal;
-	boolean lastLevel;
+	public boolean lastLevel;
 	
 	public World(SpringoGame game) {
 		this.game = game;
 		springo = new Springo(new Vector2(0, 60));
+		//springo = new Springo(new Vector2(900, 550));
 		platforms = new ArrayList<Platform>();
 		Gdx.input.setInputProcessor(new InputHandler(this));
 		generateLevel(game.level);
@@ -160,11 +161,7 @@ public class World {
 
 	private void checkPortalCollisions() {
 		if (OverlapTester.overlapRectangles(portal.bounds, springo.bounds)) {
-			if (lastLevel) {
-				state = WORLD_STATE_GAME_COMPLETED;
-			} else {
-				state = WORLD_STATE_NEXT_LEVEL;
-			}
+			state = WORLD_STATE_NEXT_LEVEL;
 		}
 	}
 	

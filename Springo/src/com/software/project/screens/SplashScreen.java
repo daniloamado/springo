@@ -7,22 +7,15 @@ import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Net.HttpMethods;
-import com.badlogic.gdx.Net.HttpRequest;
-import com.badlogic.gdx.Net.HttpResponse;
-import com.badlogic.gdx.Net.HttpResponseListener;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldListener;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.software.project.SpringoGame;
 import com.software.project.tweenacessors.SpriteTween;
-import com.software.project.utils.Assets;
+import com.software.project.tweenacessors.SpriteTweenSplash;
 
 public class SplashScreen implements Screen {
 
@@ -33,37 +26,6 @@ public class SplashScreen implements Screen {
 	TweenManager manager;
 
 	public SplashScreen(SpringoGame game) {
-		
-//		TextFieldStyle textStyle = new TextFieldStyle();
-//		textStyle.font = Assets.font;
-//		
-//		TextField textfield = new TextField("test", textStyle);
-//		textfield.setTextFieldListener(new TextFieldListener() {
-//			 @Override
-//			 public void keyTyped (TextField textField, char key) {
-//			         //if (key == '\n') textField.getOnscreenKeyboard().show(false);
-//			     }
-//			 });
-		
-		
-//		HttpRequest httpGet = new HttpRequest(HttpMethods.GET);
-//		httpGet.setUrl("http://127.0.0.1:8888/score?level=" + game.level + "&time=" + 10);
-//		
-//		Gdx.net.sendHttpRequest(httpGet, new HttpResponseListener() {
-//			public void handleHttpResponse(HttpResponse httpResponse) {
-//				String status = httpResponse.getResultAsString();
-//				System.out.println("status from request: " + status);
-//				
-//				Gdx.net.openURI("http://www.google.com");
-//				
-//			}
-//
-//			public void failed(Throwable t) {
-//				String status = "failed";
-//				System.out.println("failed from request: " + status);
-//			}
-//		});
-		
 		
 		this.game = game;
 	}
@@ -96,7 +58,7 @@ public class SplashScreen implements Screen {
 
 		batch = new SpriteBatch();
 
-		Tween.registerAccessor(Sprite.class, new SpriteTween());
+		Tween.registerAccessor(Sprite.class, new SpriteTweenSplash());
 
 		manager = new TweenManager();
 

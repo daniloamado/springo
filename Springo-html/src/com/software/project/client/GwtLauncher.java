@@ -11,6 +11,7 @@ public class GwtLauncher extends GwtApplication {
 	public GwtApplicationConfiguration getConfig () {
 		GwtApplicationConfiguration cfg = new GwtApplicationConfiguration(1280, 720);
 		cfg.useDebugGL = true;
+		cfg.fps = 65;
 		return cfg;
 	}
 

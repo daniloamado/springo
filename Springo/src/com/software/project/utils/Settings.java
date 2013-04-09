@@ -12,6 +12,8 @@ public class Settings {
 	public static boolean soundEnabled = false;
 	public final static int[] highscores = new int[] {100, 80, 50, 30, 10};
 	public final static String file = ".springo";
+	//public final static String serverAddress = "http://127.0.0.1:8888/scoreboard?";
+	public final static String serverAddress = "http://springogame.appspot.com/scoreboard?";
 
 	public static void load () {
 		BufferedReader in = null;

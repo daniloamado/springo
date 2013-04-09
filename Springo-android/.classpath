@@ -7,5 +7,6 @@
 	<classpathentry exported="true" kind="lib" path="/Springo/libs/gdx.jar" sourcepath="/Springo/libs/gdx-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="/Springo/libs/tween-engine-api.jar" sourcepath="/Springo/libs/tween-engine-api-sources.jar"/>
 	<classpathentry kind="lib" path="libs/gdx-backend-android.jar"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
