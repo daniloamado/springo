@@ -2,7 +2,7 @@ package com.software.project.utils;
 
 
 public class Settings {
-	public static boolean soundEnabled = false;
+	public static boolean soundEnabled = true;
 //	public final static int[] highscores = new int[] {100, 80, 50, 30, 10};
 //	public final static String file = ".springo";
 	//public final static String serverAddress = "http://127.0.0.1:8888/scoreboard?";
