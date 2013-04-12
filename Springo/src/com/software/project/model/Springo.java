@@ -49,13 +49,13 @@ public class Springo extends MoveableEntity{
 		
 	}
 
-	public void hitPlatform () {
+	public void hitPlatform() {
 		velocity.y = SPRINGO_JUMP_VELOCITY;
 		state = SPRINGO_STATE_JUMP;
 		stateTime = 0;
 	}
 
-	public void hitSpring () {
+	public void hitCoffee() {
 		velocity.y = SPRINGO_JUMP_VELOCITY * 1.5f;
 		state = SPRINGO_STATE_JUMP;
 		stateTime = 0;

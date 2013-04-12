@@ -27,6 +27,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
@@ -40,7 +41,7 @@ public class ScoreBoardScreen implements Screen{
 	
 	OrthographicCamera cam;
 	SpringoGame game;
-	Texture splashTexture;
+	Texture backgroundTexture;
 	SpriteBatch batch;
 	Skin skin;
 	TextureAtlas atlas;
@@ -62,21 +63,6 @@ public class ScoreBoardScreen implements Screen{
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		cam.update();
-		
-//		List<ScoreHelper> s1 = new ArrayList<ScoreHelper>();
-//		s1.add(new ScoreHelper("1", "DANILO AMADO", "10.5", DateFormat.getDateInstance(DateFormat.SHORT).format(new Date())));
-//		s1.add(new ScoreHelper("1", "MARIA AMADO", "11.5", DateFormat.getDateInstance(DateFormat.SHORT).format(new Date())));
-//		scores.put("1", s1);
-//		
-//		List<ScoreHelper> s2 = new ArrayList<ScoreHelper>();
-//		s2.add(new ScoreHelper("2", "RODRIGO AMADO", "9.9", DateFormat.getDateInstance(DateFormat.SHORT).format(new Date())));
-//		s2.add(new ScoreHelper("2", "DU AMADO", "10.5", DateFormat.getDateInstance(DateFormat.SHORT).format(new Date())));
-//		scores.put("2", s2);
-//		
-//		List<ScoreHelper> s3 = new ArrayList<ScoreHelper>();
-//		s3.add(new ScoreHelper("3", "ZITO AMADO", "20.5", DateFormat.getDateInstance(DateFormat.SHORT).format(new Date())));
-//		s3.add(new ScoreHelper("3", "TIM HORTONS", "21.5", DateFormat.getDateInstance(DateFormat.SHORT).format(new Date())));
-//		scores.put("3", s3);
 		
 		HttpRequest httpGet = new HttpRequest(HttpMethods.GET);
 		httpGet.setUrl(Settings.serverAddress + "cmd=RetrieveAll");
@@ -124,8 +110,11 @@ public class ScoreBoardScreen implements Screen{
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
 		manager.update(delta);
-		
 		batch.enableBlending();
+		
+		batch.begin();
+		stage.draw();
+		batch.end();
 		
 		batch.begin();
 		
@@ -136,7 +125,7 @@ public class ScoreBoardScreen implements Screen{
 			Assets.font.draw(batch, "Loading...", 500 , 400);
 			
 		} else {
-		
+			
 			Assets.font.draw(batch, "Level: " + levelCounter, 300 , 470);
 			
 			int linePos = 350;
@@ -155,16 +144,16 @@ public class ScoreBoardScreen implements Screen{
 		
 		batch.end();
 		
-		batch.begin();
-		stage.draw();
-		batch.end();
-		
 	}
 	//second called
 	@Override
 	public void resize(int width, int height) {
 		
 		System.out.println("resize");
+		
+		if (backgroundTexture == null) {
+			backgroundTexture = new Texture("data/scoreboardScreen.png");
+		}
 		
 		if (stage == null) {
 			stage = new Stage(width, height, true);
@@ -179,6 +168,8 @@ public class ScoreBoardScreen implements Screen{
 		style.down = skin.getDrawable("input/buttons_pressed");
 		style.font = white;
 		
+		Image image = new Image(backgroundTexture);
+		
 		btnBack = new TextButton("Back", style);
 		btnBack.setWidth(220);
 		btnBack.setHeight(60);
@@ -189,7 +180,8 @@ public class ScoreBoardScreen implements Screen{
 			@Override
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) {
-				game.setScreen(new MainMenu(game));
+				Assets.playSound(Assets.clickSound);
+				game.setScreen(new MainMenuScreen(game));
 			}
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y,
@@ -198,6 +190,7 @@ public class ScoreBoardScreen implements Screen{
 			}
 		});
 		
+		stage.addActor(image);
 		stage.addActor(btnBack);
 		
 	}
@@ -217,7 +210,7 @@ public class ScoreBoardScreen implements Screen{
 		batch.setProjectionMatrix(cam.combined);
 		
 		Tween.registerAccessor(SpriteBatch.class, new SpriteTween());
-
+		
 		manager = new TweenManager();
 
 		TweenCallback cb = new TweenCallback() {

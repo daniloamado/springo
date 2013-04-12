@@ -22,13 +22,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldListener;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.software.project.SpringoGame;
-import com.software.project.model.IcyPlatform;
 import com.software.project.utils.Assets;
 import com.software.project.utils.OverlapTester;
 import com.software.project.utils.Settings;
-import com.software.project.view.SummerWorldRenderer;
-import com.software.project.view.WinterWorldRenderer;
 import com.software.project.view.World;
+import com.software.project.view.World.WorldListener;
 import com.software.project.view.WorldRenderer;
 
 public class GameScreen implements Screen {
@@ -46,6 +44,20 @@ public class GameScreen implements Screen {
 	SpringoGame game;
 	World world;
 	WorldRenderer renderer;
+	WorldListener worldListener = new WorldListener() {
+		@Override
+		public void portal() {
+			Assets.playSound(Assets.portalSound);			
+		}
+		@Override
+		public void jump() {
+			Assets.playSound(Assets.jumpSound);
+		}
+		@Override
+		public void highJump() {
+			Assets.playSound(Assets.highJumpSound);
+		}
+	};
 	SpriteBatch batcher;
 	int state;
 	OrthographicCamera guiCam;
@@ -63,14 +75,14 @@ public class GameScreen implements Screen {
 	
 	public GameScreen(SpringoGame game) {
 		this.game = game;
-		world = new World(game);
 		
 		state = GAME_READY;
 		guiCam = new OrthographicCamera(320, 480);
 		guiCam.position.set(320 / 40, 480 / 40, 0);
 		touchPoint = new Vector3();
 		batcher = new SpriteBatch();
-		
+		world = new World(game, worldListener, batcher);	
+		renderer = world.getWorldRenderer();	
 		
 		pauseBounds = new Rectangle(140, 200, 30, 64);
 		resumeBounds = new Rectangle(-120, 60, 300, 60);
@@ -78,7 +90,6 @@ public class GameScreen implements Screen {
 		lastScore = 0;
 		
 		levelString = "Level: " + game.level;
-		renderer = new SummerWorldRenderer(batcher, world);
 	}
 
 	@Override
@@ -313,7 +324,7 @@ public class GameScreen implements Screen {
 			guiCam.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
 
 			if (OverlapTester.pointInRectangle(pauseBounds, touchPoint.x, touchPoint.y)) {
-				//Assets.playSound(Assets.clickSound);
+				Assets.playSound(Assets.clickSound);
 				state = GAME_PAUSED;
 				return;
 			}
@@ -342,12 +353,12 @@ public class GameScreen implements Screen {
 		}
 		if (world.state == World.WORLD_STATE_GAME_OVER) {
 			state = GAME_OVER;
-			if (lastScore >= Settings.highscores[4])
-				levelString = "NEW HIGHSCORE: " + lastScore;
-			else
-				levelString = "SCORE: " + lastScore;
-			Settings.addScore(lastScore);
-			Settings.save();
+//			if (lastScore >= Settings.highscores[4])
+//				levelString = "NEW HIGHSCORE: " + lastScore;
+//			else
+//				levelString = "SCORE: " + lastScore;
+//			Settings.addScore(lastScore);
+//			Settings.save();
 		}
 	}
 
@@ -356,14 +367,15 @@ public class GameScreen implements Screen {
 			guiCam.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
 
 			if (OverlapTester.pointInRectangle(resumeBounds, touchPoint.x, touchPoint.y)) {
-				//Assets.playSound(Assets.clickSound);
+				Assets.playSound(Assets.clickSound);
 				state = GAME_RUNNING;
 				return;
 			}
 
 			if (OverlapTester.pointInRectangle(quitBounds, touchPoint.x, touchPoint.y)) {
-				//Assets.playSound(Assets.clickSound);
-				game.setScreen(new MainMenu(game));
+				Assets.playSound(Assets.clickSound);
+				game.level = 1;
+				game.setScreen(new MainMenuScreen(game));
 				return;
 			}
 		}
@@ -411,13 +423,8 @@ public class GameScreen implements Screen {
 		} else {
 		
 			game.level++;
-			world = new World(game);
-			if (world.getPlatforms().get(0) instanceof IcyPlatform) {
-				renderer = new WinterWorldRenderer(batcher, world);	
-			} else {
-				renderer = new SummerWorldRenderer(batcher, world);
-			}
-			world.score = lastScore;
+			world = new World(game, worldListener, batcher);
+			renderer = world.getWorldRenderer();	
 			state = GAME_READY;
 			counter = 0;
 		}
@@ -425,7 +432,7 @@ public class GameScreen implements Screen {
 	
 	private void updateGameOver () {
 		if (Gdx.input.justTouched()) {
-			game.setScreen(new MainMenu(game));
+			game.setScreen(new MainMenuScreen(game));
 		}
 	}
 

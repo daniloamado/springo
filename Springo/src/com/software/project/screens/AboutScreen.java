@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.software.project.SpringoGame;
+import com.software.project.utils.Assets;
 
 public class AboutScreen implements Screen{
 	
@@ -90,7 +91,8 @@ public class AboutScreen implements Screen{
 			@Override
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) {
-				game.setScreen(new MainMenu(game));
+				Assets.playSound(Assets.clickSound);
+				game.setScreen(new MainMenuScreen(game));
 			}
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y,

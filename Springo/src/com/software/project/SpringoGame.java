@@ -17,6 +17,8 @@ public class SpringoGame extends Game {
 		//setScreen(new ScoreBoardScreen(this));
 		//setScreen(new GameScreen(this));
 		//setScreen(new AboutScreen(this));
+		//setScreen(new MainMenuScreen(this));
+		//setScreen(new SettingsScreen(this));
 		
 	}
 

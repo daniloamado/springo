@@ -76,7 +76,7 @@ public class SplashScreen implements Screen {
 	}
 
 	private void tweenCompleted() {
-		game.setScreen(new MainMenu(game));
+		game.setScreen(new MainMenuScreen(game));
 	}
 
 	@Override

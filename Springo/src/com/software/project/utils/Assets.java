@@ -6,6 +6,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class Assets {
 	public static Texture background;
@@ -30,13 +31,18 @@ public class Assets {
 	public static TextureRegion platform;
 	public static Animation brakingPlatform;
 	public static BitmapFont font;
+	public static Skin skin;
 
 	public static Music music;
 	public static Sound jumpSound;
 	public static Sound highJumpSound;
-	public static Sound hitSound;
-	public static Sound coinSound;
+	public static Sound portalSound;
 	public static Sound clickSound;
+	
+	public static float soundEffectsVolume = 1;
+	public static float soundBackgroundVolume = 0.02f;
+	
+	private static final String UI_FILE = "data/uiskin32.json";
 	
 	public static Texture loadTexture (String file) {
 		return new Texture(Gdx.files.internal(file));
@@ -46,6 +52,7 @@ public class Assets {
 		background = loadTexture("data/background.png");
 		backgroundRegion = new TextureRegion(background, 0, 0, 50, 50);
 
+		skin = new Skin(Gdx.files.internal(UI_FILE));
 		items = loadTexture("data/items.png");
 		mainMenu = new TextureRegion(items, 0, 224, 300, 110);
 		pauseMenu = new TextureRegion(items, 224, 128, 192, 96);
@@ -70,18 +77,18 @@ public class Assets {
 
 		font = new BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font_0.png"), false);
 
-//		music = Gdx.audio.newMusic(Gdx.files.internal("data/music.mp3"));
-//		music.setLooping(true);
-//		music.setVolume(0.5f);
-//		if (Settings.soundEnabled) music.play();
-//		jumpSound = Gdx.audio.newSound(Gdx.files.internal("data/jump.wav"));
-//		highJumpSound = Gdx.audio.newSound(Gdx.files.internal("data/highjump.wav"));
-//		hitSound = Gdx.audio.newSound(Gdx.files.internal("data/hit.wav"));
-//		coinSound = Gdx.audio.newSound(Gdx.files.internal("data/coin.wav"));
-//		clickSound = Gdx.audio.newSound(Gdx.files.internal("data/click.wav"));
+		music = Gdx.audio.newMusic(Gdx.files.internal("data/music.mp3"));
+		music.setLooping(true);
+		music.setVolume(soundBackgroundVolume);
+		if (Settings.soundEnabled) music.play();
+		jumpSound = Gdx.audio.newSound(Gdx.files.internal("data/jump.wav"));
+		highJumpSound = Gdx.audio.newSound(Gdx.files.internal("data/highjump.wav"));
+		portalSound = Gdx.audio.newSound(Gdx.files.internal("data/portal.wav"));
+		clickSound = Gdx.audio.newSound(Gdx.files.internal("data/click.wav"));
 	}
 
 	public static void playSound (Sound sound) {
-		if (Settings.soundEnabled) sound.play(1);
+		if (Settings.soundEnabled) 
+			sound.play(soundEffectsVolume);
 	}
 }
