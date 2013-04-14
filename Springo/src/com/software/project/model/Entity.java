@@ -14,7 +14,7 @@ public abstract class Entity {
 		this.position = position;
 		this.width = width;
 		this.height = height;
-		bounds = new Rectangle(position.x, position.y, width, height);
+		bounds = new Rectangle(position.x - 10, position.y, width - 10, height);
 	}
 
 	public Vector2 getPosition() {

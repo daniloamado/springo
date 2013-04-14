@@ -403,7 +403,7 @@ public class GameScreen implements Screen {
 	}
 	
 	private void updateLevelEnd () {
-		if (Gdx.input.justTouched()) {
+		if (Gdx.input.justTouched() && httpRequestProcessed) {
 			httpRequestProcessed = false;
 			performUpdateLevelEnd();
 		}

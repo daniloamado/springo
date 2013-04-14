@@ -8,6 +8,7 @@ public final class WaterWorldRenderer extends WorldRenderer{
 	
 	public WaterWorldRenderer(SpriteBatch batch, World world) {
 		super(batch, world);
+		tinyPlatformTexture = new Texture("data/tinyWaterPlatform.png");
 		platformTexture = new Texture("data/waterPlatform.png");
 		backgroundTexture = new Texture("data/waterBackground.png");
 	}

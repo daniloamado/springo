@@ -7,7 +7,7 @@ public class Springo extends MoveableEntity{
 	
 	public static final int SPRINGO_STATE_JUMP = 0;
 	public static final int SPRINGO_STATE_FALL = 1;
-	public static final int SPRINGO_STATE_HIT = 2;
+	public static final int SPRINGO_STATE_FELL_HOLE = 2;
 	public static final float SPRINGO_JUMP_VELOCITY = 250;
 	public static final float SPRINGO_MOVE_VELOCITY = 400;
 	
@@ -28,14 +28,14 @@ public class Springo extends MoveableEntity{
 		bounds.x = position.x - bounds.width / 4;
 		bounds.y = position.y - bounds.height / 6;
 
-		if (velocity.y > 0 && state != SPRINGO_STATE_HIT) {
+		if (velocity.y > 0 && state != SPRINGO_STATE_FELL_HOLE) {
 			if (state != SPRINGO_STATE_JUMP) {
 				state = SPRINGO_STATE_JUMP;
 				stateTime = 0;
 			}
 		}
 
-		if (velocity.y < 0 && state != SPRINGO_STATE_HIT) {
+		if (velocity.y < 0 && state != SPRINGO_STATE_FELL_HOLE) {
 			if (state != SPRINGO_STATE_FALL) {
 				state = SPRINGO_STATE_FALL;
 				stateTime = 0;
@@ -52,6 +52,12 @@ public class Springo extends MoveableEntity{
 	public void hitPlatform() {
 		velocity.y = SPRINGO_JUMP_VELOCITY;
 		state = SPRINGO_STATE_JUMP;
+		stateTime = 0;
+	}
+	
+	public void hitHole() {
+		velocity.set(0, 0);
+		state = SPRINGO_STATE_FELL_HOLE;
 		stateTime = 0;
 	}
 

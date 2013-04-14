@@ -5,10 +5,11 @@ import com.software.project.view.World;
 
 public class Platform extends MoveableEntity{
 
-	private static int PLATFORM_SPEED = 80;
-	private static int PLATFORM_ROTATION = 0;
-	private static int PLATFORM_WIDTH = 400;
-	private static int PLATFORM_HEIGHT = 60;
+	protected static int PLATFORM_SPEED = 80;
+	protected static int PLATFORM_ROTATION = 0;
+	protected static int PLATFORM_WIDTH = 400;
+	protected static int PLATFORM_HEIGHT = 60;
+	protected static boolean PLATFORM_STILL = false;
 	private boolean moving;
 	float stateTime;
 	
@@ -24,6 +25,9 @@ public class Platform extends MoveableEntity{
 		super(PLATFORM_SPEED, rotation, width, height, position);
 		this.moving = moving;
 		this.stateTime = 0;
+		if (moving) {
+			velocity.x = PLATFORM_SPEED;
+		}
 	}
 	
 	public Platform(Vector2 position, boolean moving) {

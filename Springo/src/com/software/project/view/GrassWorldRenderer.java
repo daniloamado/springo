@@ -7,7 +7,7 @@ public final class GrassWorldRenderer extends WorldRenderer{
 
 	public GrassWorldRenderer(SpriteBatch batch, World world) {
 		super(batch, world);
-		
+		tinyPlatformTexture = new Texture("data/tinyGrassPlatform.png");
 		platformTexture = new Texture("data/platform.png");
 		backgroundTexture = new Texture("data/background.png");
 	}

@@ -15,7 +15,7 @@ import com.software.project.entities.Score;
 public class RetrieveAll implements Command {
 
 	private ScoreBoardManager scoreBoardManager = new ScoreBoardManagerImpl();
-	private int numberOfLevels = 5;
+	private int numberOfLevels = 12;
 	
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response)

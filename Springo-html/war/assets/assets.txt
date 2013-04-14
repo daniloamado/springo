@@ -32,6 +32,12 @@ i:data/springo.png
 b:data/test.atlas
 i:data/test.png
 b:data/Thumbs.db
+i:data/tinyGrassPlatform.png
+i:data/tinyIcePlatform.png
+i:data/tinyLavaPlatform.png
+i:data/tinySandPlatform.png
+i:data/tinySkyPlatform.png
+i:data/tinyWaterPlatform.png
 b:data/uiskin32.atlas
 t:data/uiskin32.json
 i:data/uiskin32.png
